@@ -6,14 +6,20 @@
 // SPDX-License-Identifier: MIT
 //
 
+import { logger } from 'firebase-functions/v2';
 import { beforeUserCreated } from 'firebase-functions/v2/identity'
 
 export const beforeUserCreatedFunction = beforeUserCreated(async (event) => {
-    console.log("beforeUserCreated with event:", JSON.stringify(event));
-    console.log("beforeUserCreated with email:", event.data?.email);
-    console.log("beforeUserCreated with providerId:", event.credential?.providerId);
-    const allowedProviderIds = ["google.com", "facebook.com"];
+    logger.info(event.data?.uid, "event:", JSON.stringify(event));
+    logger.info(event.data?.uid, "email:", event.data?.email);
+    logger.info(event.data?.uid, "providerId:", event.credential?.providerId);
+    if (event.data?.email === undefined) {
+        logger.error(event.data?.uid, "Email address is required for user.")
+        throw new Error("Email address is required for user.");
+    }
+    const allowedProviderIds = ["oidc.stanford", "oidc.johnshopkins", "oidc.michigan"];
     if (!allowedProviderIds.includes(event.credential?.providerId ?? "")) {
+        logger.error(event.data?.uid, "SSO Provider is not allowed.")
         throw new Error("Provider not allowed");
     }
 });
