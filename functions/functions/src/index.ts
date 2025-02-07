@@ -1,3 +1,10 @@
+//
+// This source file is part of the Stanford SSO Testing Ground project based on the Stanford Spezi Template Application project
+//
+// SPDX-FileCopyrightText: 2023 Stanford University
+//
+// SPDX-License-Identifier: MIT
+//
 
 import { beforeUserCreated } from 'firebase-functions/v2/identity'
 
